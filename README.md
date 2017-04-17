@@ -1,6 +1,6 @@
 # pink-mysql
 
-pinkjs[https://github.com/pinkjs/pink] 的MySql模块。此模块为可选模块、为pinkjs框架设计,并且结合bluebird的Promise实现异步
+pink-mysql是 [pinkjs](https://github.com/pinkjs/pink) 的MySql模块。此模块为可选模块、为pinkjs框架设计,并且结合bluebird的Promise实现异步
 
 功能：
 
