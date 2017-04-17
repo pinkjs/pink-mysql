@@ -1,0 +1,26 @@
+{
+  "name": "pink-mysql",
+  "version": "1.0.0",
+  "description": "pink-mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinkjs/pink-mysql.git"
+  },
+  "keywords": [
+    "mysql"
+  ],
+  "author": "zhoujun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pinkjs/pink-mysql/issues"
+  },
+  "homepage": "https://github.com/pinkjs/pink-mysql#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "mysql": "^2.13.0"
+  }
+}
