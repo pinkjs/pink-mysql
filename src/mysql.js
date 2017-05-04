@@ -45,7 +45,8 @@ class Mysql {
 		return model._create(values,this.tableName)
 	}
 	find(select){
-		model.find(select,this.tableName);
+		return model.find(select,this.tableName);
+		this.sql = model.sql;
 	}
 }
 
