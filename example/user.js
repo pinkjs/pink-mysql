@@ -32,7 +32,7 @@ class User extends Mysql{
 
 let user = new User();
 
-let result = user.find('username')._where({id:{'<':442288}}).exec();
+let result = user.find('username')._where({id:{'<':442288}}).order('created_time','desc').limit(2).exec();
 result.then((r)=>{
 	console.log(r)
 })

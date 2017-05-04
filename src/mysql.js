@@ -52,6 +52,7 @@ class Mysql {
 		this.whereStr = '';
 		this.orderStr = '';
 		this.limitStr = '';
+		this.havingStr = '';
 	}
 	async create(values){
 		return await model._create(values,this.tableName)
@@ -105,18 +106,23 @@ class Mysql {
 		if(this.sqlStr == undefined){
 			throw new Error('not sql');
 		}
+		if( ! (type == 'asc' || type == 'desc') ){
+			throw new Error('not type use mysql');
+		}
 
 		this.orderStr = ` order by ${name} ${type}`;
+		return this;
 	}
 	limit(start, num){
 		if(num == undefined){
-			this.limitStr = `limit ${start}`;
+			this.limitStr = ` limit ${start}`;
 		}else{
-			this.limitStr = `limit ${start} , ${num}`;
+			this.limitStr = ` limit ${start} , ${num}`;
 		}
+		return this;
 	}
 	having(){
-
+		this.havingStr = ` having `
 	}
 }
 

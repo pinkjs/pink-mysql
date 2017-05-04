@@ -19,3 +19,49 @@ pink-mysql是 [pinkjs](https://github.com/pinkjs/pink) 的MySql模块。此模�
 4. creatre
 5. update
 6. delete
+
+
+# 快速开始
+
+配置文件
+```js
+const Mysql = require('pink-mysql');
+
+//连接数据库
+const connection = require('pink-mysql').connection;
+connection({
+	user:  'root',
+	password: '',
+	database: 'pinkmysql',
+	host: '127.0.0.1',
+	charset: 'utf8mb4',
+	connectionLimit : 200
+});
+```
+
+使用模型
+
+```js
+const Mysql = require('pink-mysql');
+//使用模型
+class User extends Mysql{
+
+	constructor(){
+		super();
+		this.tableName = 'users';
+	}
+
+}
+
+let user = new User();
+
+let result = user.find('username')._where({id:{'<':442288}}).order('created_time','desc').limit(2).exec();
+//返回Promise对象
+result.then((r)=>{
+	console.log(r)
+})
+//得到的结果
+[ RowDataPacket { username: 'username' },
+  RowDataPacket { username: 'username' } ]
+
+```
