@@ -32,6 +32,7 @@ class User extends Mysql{
 
 let user = new User();
 
-user.find().then((r)=>{
-	console.log(user.sql);
+let result = user.find('username')._where({id:{'<':442288}}).exec();
+result.then((r)=>{
+	console.log(r)
 })

@@ -68,6 +68,10 @@ class Mysql {
 		this.sqlStr += (this.whereStr + this.orderStr + this.limitStr);
 		return await model.query(this.sqlStr);
 	}
+	/*
+	* @params {obj}
+	* @return {this}
+	* */
 	_where(obj){
 		if(this.sqlStr == undefined){
 			throw new Error('not sql');
@@ -77,12 +81,22 @@ class Mysql {
 		}
 
 		this.whereStr += ` where `;
-
 		for(let k in obj){
-			this.whereStr += `${k} = ${obj[k]}`;
-			if(Object.keys(obj).length>1){
-				this.whereStr += ` and ${k} = ${obj[k]}`;
+			if(typeof obj[k] == 'string'){
+				this.whereStr += `${k} = ${obj[k]}`;
+				if(Object.keys(obj).length>1){
+					this.whereStr += ` and ${k} = ${obj[k]}`;
+				}
+			}else{
+				for ( let condition in obj[k]){
+					if(! ['>','<','=','in','like','is not'].includes(condition)){
+						throw new Error('where condition not use mysql');
+					}
+					this.whereStr += `${k} ${condition} ${obj[k][condition]}`;
+				}
+
 			}
+
 		}
 		return this;
 	}
