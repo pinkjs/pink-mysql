@@ -1,4 +1,4 @@
-# pink-mysql
+# Pink-MySql
 
 [![NPM](https://nodei.co/npm/pink-mysql.png)](https://nodei.co/npm/pink-mysql/)
 [![Build Status](https://travis-ci.org/pinkjs/pink-mysql.svg?branch=master)](https://travis-ci.org/pinkjs/pink-mysql)
