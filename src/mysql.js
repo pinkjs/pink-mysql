@@ -26,7 +26,7 @@ model._create = async function (value,tableName ) {
 	let result = await this.query(sql,value);
 	return this;
 }
-model.find = async function ( select, tableName ) {
+model.find =  function ( select, tableName ) {
 	let sql = ''
 	if(select == undefined){
 		sql = `select * from ${tableName}`;
@@ -56,8 +56,8 @@ class Mysql {
 	async create(values){
 		return await model._create(values,this.tableName)
 	}
-	async find(select){
-		let result = await model.find(select,this.tableName);
+	find(select){
+		let result =  model.find(select,this.tableName);
 		this.sqlStr = result;
 		return this;
 	}
@@ -68,16 +68,20 @@ class Mysql {
 		this.sqlStr += (this.whereStr + this.orderStr + this.limitStr);
 		return await model.query(this.sqlStr);
 	}
-	where(obj){
+	_where(obj){
 		if(this.sqlStr == undefined){
 			throw new Error('not sql');
 		}
-		this.whereStr += ` where`;
+		if(obj== undefined || Object.keys(obj).length ==0){
+			throw new Error('where is null');
+		}
+
+		this.whereStr += ` where `;
 
 		for(let k in obj){
 			this.whereStr += `${k} = ${obj[k]}`;
 			if(Object.keys(obj).length>1){
-				this.sqwhereStrl += ` and ${k} = ${obj[k]}`;
+				this.whereStr += ` and ${k} = ${obj[k]}`;
 			}
 		}
 		return this;
