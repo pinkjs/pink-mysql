@@ -1,5 +1,8 @@
 # pink-mysql
+
+[![NPM](https://nodei.co/npm/pink-mysql.png)](https://nodei.co/npm/pink-mysql/)
 [![Build Status](https://travis-ci.org/pinkjs/pink-mysql.svg?branch=master)](https://travis-ci.org/pinkjs/pink-mysql)
+
 pink-mysql是 [pinkjs](https://github.com/pinkjs/pink) 的MySql模块。此模块为可选模块、为pinkjs框架设计,并且结合bluebird的Promise实现异步
 
 功能：
