@@ -15,15 +15,9 @@ Promise.promisifyAll([Pool,Connection]);
 const model = Object.create(mysql);
 
 
-/*
-* 连接数据库的方法
-* */
-model.connection = function ( config ) {
-	this.pool = model.createPool(config);
-}
-
 model.query = async function ( sql,value ) {
-
+	let formatSql = mysql.format(sql,value);
+	console.log(formatSql);
 	return await this.pool.queryAsync(sql,value);
 }
 
@@ -32,22 +26,87 @@ model._create = async function (value,tableName ) {
 	let result = await this.query(sql,value);
 	return this;
 }
-model.find = async function ( select = '*', tableName ) {
-	this.sql = `select ? from ${tableName}`;
-	return this;
+model.find = async function ( select, tableName ) {
+	let sql = ''
+	if(select == undefined){
+		sql = `select * from ${tableName}`;
+	}else{
+		sql = `select ? from ${tableName}`;
+	}
+	sql = mysql.format(sql,[select]);
+	//let result = await this.query(this.sql,[select]);
+	return sql;
+}
+
+model.where  = function ( obj ) {
+
+}
+
+model.exec = function (  ) {
+	
 }
 
 class Mysql {
 	constructor(){
+		this.sqlStr 	= '';
+		this.whereStr = '';
+		this.orderStr = '';
+		this.limitStr = '';
+	}
+	async create(values){
+		return await model._create(values,this.tableName)
+	}
+	async find(select){
+		let result = await model.find(select,this.tableName);
+		this.sqlStr = result;
+		return this;
+	}
+	/*
+	* 执行sql语句，执行之前对sql语句拼装
+	* */
+	async exec(){
+		this.sqlStr += (this.whereStr + this.orderStr + this.limitStr);
+		return await model.query(this.sqlStr);
+	}
+	where(obj){
+		if(this.sqlStr == undefined){
+			throw new Error('not sql');
+		}
+		this.whereStr += ` where`;
 
+		for(let k in obj){
+			this.whereStr += `${k} = ${obj[k]}`;
+			if(Object.keys(obj).length>1){
+				this.sqwhereStrl += ` and ${k} = ${obj[k]}`;
+			}
+		}
+		return this;
 	}
-	create(values){
-		return model._create(values,this.tableName)
+
+	order(name,type){
+		if(this.sqlStr == undefined){
+			throw new Error('not sql');
+		}
+
+		this.orderStr = ` order by ${name} ${type}`;
 	}
-	find(select){
-		return model.find(select,this.tableName);
-		this.sql = model.sql;
+	limit(start, num){
+		if(num == undefined){
+			this.limitStr = `limit ${start}`;
+		}else{
+			this.limitStr = `limit ${start} , ${num}`;
+		}
+	}
+	having(){
+
 	}
 }
 
 module.exports = Mysql;
+
+/*
+ * 连接数据库的方法
+ * */
+module.exports.connection =  model.connection = function ( config ) {
+	model.pool = model.createPool(config);
+}
