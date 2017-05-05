@@ -23,7 +23,13 @@ model.query = async function ( sql,value ) {
 	}
 	return await this.pool.queryAsync(sql,value);
 }
-
+/**
+ * 创建数据
+ * @param value
+ * @param tableName
+ * @returns {Promise.<model>}
+ * @private
+ */
 model._create = async function (value,tableName ) {
 	let sql = `insert into ${tableName} SET ?`;
 	let result = await this.query(sql,value);
@@ -49,9 +55,12 @@ class Mysql {
 		this.limitStr = '';
 		this.havingStr = '';
 	}
-	/*
-	* 创建数据，给出的Object会被解析成SQl的insert语句
-	* */
+
+	/**
+	 * 创建数据，给出的Object会被解析成SQl的insert语句
+	 * @param values
+	 * @returns {Promise.<model>}
+	 */
 	async create(values){
 		return await model._create(values,this.tableName)
 	}
@@ -66,18 +75,22 @@ class Mysql {
 		this.sqlStr = result;
 		return this;
 	}
-	/*
-	* 执行sql语句，执行之前对sql语句拼装
-	* */
+
+	/**
+	 * 执行sql语句，执行之前对sql语句拼装
+	 * @returns {Promise}
+	 */
 	async exec(){
 		this.sqlStr += (this.whereStr + this.orderStr + this.limitStr);
 		return await model.query(this.sqlStr);
 	}
-	/*
-	* 组装where条件。支持大于小于等操作
-	* @params {obj}
-	* @return {this}
-	* */
+
+	/**
+	 * 组装where条件。支持大于小于等操作
+	 * @param obj
+	 * @returns {Mysql}
+	 * @private
+	 */
 	_where(obj){
 		if(this.sqlStr == undefined){
 			throw new Error('not sql');
@@ -104,12 +117,13 @@ class Mysql {
 		}
 		return this;
 	}
-	/*
-	* order by 条件的拼装
-	* @param { name}
-	* @param { type}
-	* @return {this}
-	* */
+
+	/**
+	 * order by 条件的拼装
+	 * @param name
+	 * @param type
+	 * @returns {Mysql}
+	 */
 	order(name,type){
 		if(this.sqlStr == undefined){
 			throw new Error('not sql');
