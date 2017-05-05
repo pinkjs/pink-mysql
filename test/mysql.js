@@ -8,9 +8,6 @@ var Mysql = require('../src/mysql');
 
 describe('mysql', function() {
 	it('find() should return 0 if no items are passed in', function() {
-		var mysql = new Mysql([]);
-		mysql.tableName = 'user'
-		Promise.resolve(mysql.find());
-		expect(mysql.sql).to.equal('select * from user');
+
 	});
 });

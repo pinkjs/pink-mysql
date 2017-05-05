@@ -13,11 +13,14 @@ const Connection = require('mysql/lib/Connection');
 Promise.promisifyAll([Pool,Connection]);
 
 const model = Object.create(mysql);
-
-
+/*
+* 封装query方法测试环境会输出SQL日志
+* */
 model.query = async function ( sql,value ) {
 	let formatSql = mysql.format(sql,value);
-	console.log(formatSql);
+	if(process.NODE_ENV == undefined || process.NODE_ENV == 'test'){
+		console.log(formatSql);
+	}
 	return await this.pool.queryAsync(sql,value);
 }
 
@@ -38,14 +41,6 @@ model.find =  function ( select, tableName ) {
 	return sql;
 }
 
-model.where  = function ( obj ) {
-
-}
-
-model.exec = function (  ) {
-	
-}
-
 class Mysql {
 	constructor(){
 		this.sqlStr 	= '';
@@ -54,9 +49,18 @@ class Mysql {
 		this.limitStr = '';
 		this.havingStr = '';
 	}
+	/*
+	* 创建数据，给出的Object会被解析成SQl的insert语句
+	* */
 	async create(values){
 		return await model._create(values,this.tableName)
 	}
+
+	/*
+	* 查找数据
+	* @param {select} 如 select name form
+	* @return {this}
+	* */
 	find(select){
 		let result =  model.find(select,this.tableName);
 		this.sqlStr = result;
@@ -70,6 +74,7 @@ class Mysql {
 		return await model.query(this.sqlStr);
 	}
 	/*
+	* 组装where条件。支持大于小于等操作
 	* @params {obj}
 	* @return {this}
 	* */
@@ -95,13 +100,16 @@ class Mysql {
 					}
 					this.whereStr += `${k} ${condition} ${obj[k][condition]}`;
 				}
-
 			}
-
 		}
 		return this;
 	}
-
+	/*
+	* order by 条件的拼装
+	* @param { name}
+	* @param { type}
+	* @return {this}
+	* */
 	order(name,type){
 		if(this.sqlStr == undefined){
 			throw new Error('not sql');
@@ -129,7 +137,7 @@ class Mysql {
 module.exports = Mysql;
 
 /*
- * 连接数据库的方法
+ * 连接数据库的方法 配置文件中加载此函数传入配置即可。
  * */
 module.exports.connection =  model.connection = function ( config ) {
 	model.pool = model.createPool(config);
