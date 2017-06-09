@@ -53,9 +53,9 @@ model.find =  function ( select, tableName ) {
 	if(select == undefined){
 		sql = `select * from ${tableName}`;
 	}else{
-		sql = `select ? from ${tableName}`;
+		sql = `select ${select.join(',')} from ${tableName}`;
 	}
-	sql = mysql.format(sql,[select]);
+	sql = mysql.format(sql);
 	//let result = await this.query(this.sql,[select]);
 	return sql;
 }
