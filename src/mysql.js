@@ -13,16 +13,28 @@ const Connection = require('mysql/lib/Connection');
 Promise.promisifyAll([Pool,Connection]);
 
 const model = Object.create(mysql);
+
 /*
-* 封装query方法测试环境会输出SQL日志
-* */
-model.query = async function ( sql,value ) {
-	let formatSql = mysql.format(sql,value);
-	if(process.NODE_ENV == undefined || process.NODE_ENV == 'test'){
-		console.log(formatSql);
+ * 封装query方法测试环境会输出SQL日志
+ * */
+if(process.NODE_ENV == undefined || process.NODE_ENV == 'test'){
+
+	model.query = async function ( sql,value ) {
+		let formatSql = mysql.format(sql,value);
+		if(process.NODE_ENV == undefined || process.NODE_ENV == 'test'){
+			console.log(formatSql);
+		}
+		return await this.pool.queryAsync(sql,value);
 	}
-	return await this.pool.queryAsync(sql,value);
+
+}else{
+
+	model.query = async function ( sql,value ) {
+		return await this.pool.queryAsync(sql,value);
+	}
+
 }
+
 /**
  * 创建数据
  * @param value
@@ -34,7 +46,7 @@ model._create = async function (value,tableName ) {
 	let sql = `insert into ${tableName} SET ?`;
 	let result = await model.query(sql,value);
 	this.insertId = result.insertId;
-	return model;
+	return this;
 }
 model.find =  function ( select, tableName ) {
 	let sql = ''
