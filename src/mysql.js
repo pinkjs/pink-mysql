@@ -32,8 +32,9 @@ model.query = async function ( sql,value ) {
  */
 model._create = async function (value,tableName ) {
 	let sql = `insert into ${tableName} SET ?`;
-	let result = await this.query(sql,value);
-	return this;
+	let result = await model.query(sql,value);
+	this.insertId = result.insertId;
+	return model;
 }
 model.find =  function ( select, tableName ) {
 	let sql = ''
@@ -62,7 +63,7 @@ class Mysql {
 	 * @returns {Promise.<model>}
 	 */
 	async create(values){
-		return await model._create(values,this.tableName)
+		return await model._create.call(this,values,this.tableName)
 	}
 
 	/*
