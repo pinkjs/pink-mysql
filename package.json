@@ -1,6 +1,6 @@
 {
   "name": "pink-mysql",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "pink-mysql",
   "main": "index.js",
   "scripts": {
