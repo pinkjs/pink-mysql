@@ -95,6 +95,7 @@ class Mysql {
 	 */
 	async exec(resultType = false){
 		this.sqlStr += (this.whereStr + this.orderStr + this.limitStr);
+		this.whereStr = this.orderStr = this.limitStr = '';
 		if(resultType){
 			let result = await model.query(this.sqlStr);
 			return result[0];
