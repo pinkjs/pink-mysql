@@ -93,8 +93,12 @@ class Mysql {
 	 * 执行sql语句，执行之前对sql语句拼装
 	 * @returns {Promise}
 	 */
-	async exec(){
+	async exec(resultType = false){
 		this.sqlStr += (this.whereStr + this.orderStr + this.limitStr);
+		if(resultType){
+			let result = await model.query(this.sqlStr);
+			return result[0];
+		}
 		return await model.query(this.sqlStr);
 	}
 
@@ -104,7 +108,7 @@ class Mysql {
 	 * @returns {Mysql}
 	 * @private
 	 */
-	_where(obj){
+	where(obj){
 		if(this.sqlStr == undefined){
 			throw new Error('not sql');
 		}
