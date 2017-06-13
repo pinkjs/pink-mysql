@@ -119,10 +119,16 @@ class Mysql {
 
 		this.whereStr += ` where `;
 		for(let k in obj){
-			if(typeof obj[k] == 'string' || typeof obj[k] == 'number'){
+			if(typeof obj[k] == 'number'){
 				this.whereStr += `${k} = ${obj[k]}`;
 				if(Object.keys(obj).length>1){
 					this.whereStr += ` and ${k} = ${obj[k]}`;
+				}
+			}else
+			if(typeof obj[k] == 'string'){
+				this.whereStr += `${k} = '${obj[k]}'`;
+				if(Object.keys(obj).length>1){
+					this.whereStr += ` and ${k} = '${obj[k]}'`;
 				}
 			}else{
 				for ( let condition in obj[k]){
