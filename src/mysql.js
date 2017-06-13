@@ -94,7 +94,7 @@ class Mysql {
 	 * @returns {Promise}
 	 */
 	async exec(resultType = false){
-		this.sqlStr += (this.whereStr + this.orderStr + this.limitStr);
+		this.sqlStr += (this.whereStr + this.groupStr + this.orderStr + this.limitStr);
 		this.whereStr = this.orderStr = this.limitStr = '';
 		if(resultType){
 			let result = await model.query(this.sqlStr);
@@ -165,6 +165,10 @@ class Mysql {
 		}else{
 			this.limitStr = ` limit ${start} , ${num}`;
 		}
+		return this;
+	}
+	group(name){
+		this.groupStr = ` group by ${name} `
 		return this;
 	}
 	having(){
