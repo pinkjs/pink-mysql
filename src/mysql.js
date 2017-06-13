@@ -67,6 +67,7 @@ class Mysql {
 		this.orderStr = '';
 		this.limitStr = '';
 		this.havingStr = '';
+		this.groupStr = '';
 	}
 
 	/**
