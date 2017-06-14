@@ -175,6 +175,9 @@ class Mysql {
 	having(){
 		this.havingStr = ` having `
 	}
+	query(sql,value){
+		return model.query(sql,value);
+	}
 }
 
 module.exports = Mysql;
