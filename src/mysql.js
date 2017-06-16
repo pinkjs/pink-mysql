@@ -121,14 +121,16 @@ class Mysql {
 		this.whereStr += ` where `;
 		for(let k in obj){
 			if(typeof obj[k] == 'number'){
-				this.whereStr += `${k} = ${obj[k]}`;
-				if(Object.keys(obj).length>1){
+				if(this.whereStr.length == 7){
+					this.whereStr += `${k} = ${obj[k]}`;
+				}else{
 					this.whereStr += ` and ${k} = ${obj[k]}`;
 				}
 			}else
 			if(typeof obj[k] == 'string'){
-				this.whereStr += `${k} = '${obj[k]}'`;
-				if(Object.keys(obj).length>1){
+				if(this.whereStr.length == 7){
+					this.whereStr += `${k} = '${obj[k]}'`;
+				}else{
 					this.whereStr += ` and ${k} = '${obj[k]}'`;
 				}
 			}else{
@@ -177,6 +179,9 @@ class Mysql {
 	}
 	query(sql,value){
 		return model.query(sql,value);
+	}
+	update(){
+		this.updatesql = `update ${this.tableName} SET `
 	}
 }
 
