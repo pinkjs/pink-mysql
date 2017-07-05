@@ -61,13 +61,14 @@ model.find =  function ( select, tableName ) {
 }
 
 class Mysql {
-	constructor(){
+	constructor({tableName}){
 		this.sqlStr 	= '';
 		this.whereStr = '';
 		this.orderStr = '';
 		this.limitStr = '';
 		this.havingStr = '';
 		this.groupStr = '';
+		this.tableName = tableName || '';
 	}
 
 	/**
