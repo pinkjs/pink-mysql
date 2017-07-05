@@ -139,7 +139,11 @@ class Mysql {
 					if(! ['>','<','=','in','like','is not'].includes(condition)){
 						throw new Error('where condition not use mysql');
 					}
-					this.whereStr += `${k} ${condition} ${obj[k][condition]}`;
+					if(this.whereStr.length == 7){
+						this.whereStr += `${k} = '${obj[k]}'`;	this.whereStr += `${k} ${condition} ${obj[k][condition]}`;
+					}else{
+						this.whereStr += ` and ${k} ${condition} ${obj[k][condition]}`;
+					}
 				}
 			}
 		}
