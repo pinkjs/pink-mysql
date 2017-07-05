@@ -140,7 +140,7 @@ class Mysql {
 						throw new Error('where condition not use mysql');
 					}
 					if(this.whereStr.length == 7){
-						this.whereStr += `${k} = '${obj[k]}'`;	this.whereStr += `${k} ${condition} ${obj[k][condition]}`;
+						this.whereStr += `${k} ${condition} ${obj[k][condition]}`;
 					}else{
 						this.whereStr += ` and ${k} ${condition} ${obj[k][condition]}`;
 					}
